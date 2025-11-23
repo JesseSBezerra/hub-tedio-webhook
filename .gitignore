@@ -38,3 +38,6 @@ Thumbs.db
 .env
 *.env
 !.env.example
+
+# Docker Compose com credenciais (NUNCA COMMITAR)
+docker-compose.yml
