@@ -23,18 +23,27 @@
 hs_err_pid*
 replay_pid*
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+*.egg-info/
+dist/
+build/
+
 # IDE
-.idea/
 .vscode/
-*.iml
-*.ipr
-*.iws
+.idea/
+*.swp
+*.swo
+*~
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Environment variables (NUNCA COMMITAR)
+# Environment variables
 .env
-*.env
-!.env.example
+.env.local

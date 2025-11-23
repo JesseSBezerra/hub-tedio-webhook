@@ -1,90 +1,96 @@
-# 🎯 TedioHook - Webhook Receptor para Evolution API
+# hub-tedio-webhook
 
-Projeto Spring Boot para receber e processar webhooks da Evolution API do WhatsApp.
+A simple webhook receiver application for processing hub-tedio events.
 
-## 📁 Estrutura do Projeto
+## Features
 
-```
-tediohook/
-├── .github/
-│   └── workflows/
-│       ├── docker-build-push.yml    # GitHub Actions workflow
-│       └── README.md                # Instruções do workflow
-├── app/
-│   ├── src/                         # Código fonte da aplicação
-│   ├── Dockerfile                   # Configuração Docker
-│   ├── .env.example                 # Exemplo de variáveis de ambiente
-│   ├── docker-build-push.sh         # Script build/push (Linux/Mac)
-│   ├── docker-build-push.ps1        # Script build/push (Windows)
-│   ├── pom.xml                      # Maven dependencies
-│   ├── README.md                    # Documentação da aplicação
-│   ├── DOCKER.md                    # Documentação Docker
-│   └── EVENTOS.md                   # Documentação dos eventos
-└── README.md                        # Este arquivo
+- Simple HTTP webhook receiver
+- JSON payload processing
+- Request logging
+- Health check endpoint
+- Configurable via environment variables
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/JesseSBezerra/hub-tedio-webhook.git
+cd hub-tedio-webhook
 ```
 
-## 🚀 Quick Start
+2. Create a virtual environment and install dependencies:
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-### Usando Docker Hub (Mais Rápido)
+## Usage
+
+### Running the application
+
+**Basic run:**
+```bash
+python app.py
+```
+
+**With environment variables:**
+```bash
+PORT=8080 DEBUG=true python app.py
+```
+
+**Using Docker:**
+```bash
+docker build -t hub-tedio-webhook .
+docker run -p 5000:5000 hub-tedio-webhook
+```
+
+**Using Docker Compose:**
+```bash
+docker-compose up
+```
+
+The webhook receiver will start on `http://localhost:5000`
+
+### Environment Variables
+
+- `PORT`: Port to run the server on (default: 5000)
+- `HOST`: Host to bind to (default: 0.0.0.0)
+- `DEBUG`: Enable debug mode (default: False)
+- `SECRET_KEY`: Secret key for Flask app
+- `WEBHOOK_SECRET`: Secret for webhook verification (optional)
+
+### Endpoints
+
+- `GET /`: Health check endpoint
+  - Returns service status and timestamp
+
+- `POST /webhook`: Main webhook receiver
+  - Accepts JSON payloads
+  - Logs all received webhooks
+  - Returns processing status
+
+### Example Usage
+
+Send a test webhook:
 
 ```bash
-docker pull jessebezerra/tediohook:latest
-
-docker run -d \
-  --name tediohook-app \
-  -p 8102:8102 \
-  -e DATABASE_HOST=your-host \
-  -e DATABASE_PORT=5432 \
-  -e DATABASE_NAME=your-db \
-  -e DATABASE_USER=your-user \
-  -e DATABASE_PASSWORD=your-password \
-  jessebezerra/tediohook:latest
+curl -X POST http://localhost:5000/webhook \
+  -H "Content-Type: application/json" \
+  -H "X-Event-Type: test" \
+  -d '{"event": "test", "data": "hello world"}'
 ```
 
-### Desenvolvimento Local
+Health check:
 
 ```bash
-cd app
-mvn spring-boot:run
+curl http://localhost:5000/
 ```
 
-## 📚 Documentação
+## Development
 
-- **[app/README.md](app/README.md)** - Documentação completa da aplicação
-- **[app/DOCKER.md](app/DOCKER.md)** - Guia Docker completo
-- **[app/EVENTOS.md](app/EVENTOS.md)** - Documentação dos eventos suportados
-- **[.github/workflows/README.md](.github/workflows/README.md)** - GitHub Actions
+The application uses Flask for simplicity and ease of deployment. Extend the `process_webhook` function in `app.py` to add custom webhook processing logic.
 
-## 🐳 Docker Hub
+## License
 
-Imagem disponível em: https://hub.docker.com/r/jessebezerra/tediohook
-
-## 🔧 Tecnologias
-
-- Java 17
-- Spring Boot 3.1.5
-- Maven
-- Docker
-- GitHub Actions
-
-## 📡 Endpoints
-
-- `POST /api/webhook` - Recebe webhooks
-- `GET /api/actuator/health` - Health check
-
-## 🎯 Eventos Suportados
-
-- ✅ `contacts.upsert` - Sincronização de contatos
-- ✅ `contacts.update` - Atualização de contatos/grupos
-- ✅ `messages.upsert` - Mensagens (texto, imagem, vídeo, áudio, etc)
-
-## 🤝 CI/CD
-
-O projeto usa GitHub Actions para automatizar:
-- Build da imagem Docker
-- Push para Docker Hub
-- Suporte multi-plataforma (amd64, arm64)
-
-## 📄 Licença
-
-Proprietário - TedioInfernal
+MIT License
