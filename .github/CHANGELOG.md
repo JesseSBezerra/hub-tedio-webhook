@@ -4,7 +4,8 @@
 
 ### Fixed
 - Corrigido erro de build multi-plataforma no GitHub Actions
-  - Substituída imagem base `eclipse-temurin:17-jre-alpine` por `amazoncorretto:17-alpine`
+  - **Stage 1 (Build)**: Substituída `maven:3.9-eclipse-temurin-17-alpine` por `maven:3.9-amazoncorretto-17-alpine`
+  - **Stage 2 (Runtime)**: Substituída `eclipse-temurin:17-jre-alpine` por `amazoncorretto:17-alpine`
   - Amazon Corretto suporta nativamente linux/amd64 e linux/arm64
   - Resolve erro: "no match for platform in manifest: not found"
 
