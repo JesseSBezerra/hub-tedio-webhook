@@ -29,8 +29,25 @@ pip install -r requirements.txt
 
 ### Running the application
 
+**Basic run:**
 ```bash
 python app.py
+```
+
+**With environment variables:**
+```bash
+PORT=8080 DEBUG=true python app.py
+```
+
+**Using Docker:**
+```bash
+docker build -t hub-tedio-webhook .
+docker run -p 5000:5000 hub-tedio-webhook
+```
+
+**Using Docker Compose:**
+```bash
+docker-compose up
 ```
 
 The webhook receiver will start on `http://localhost:5000`
