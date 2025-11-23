@@ -77,11 +77,12 @@ docker inspect --format='{{json .State.Health}}' tediohook-app
 ## 📊 Informações da Imagem
 
 ### Características:
-- **Base**: Eclipse Temurin 17 JRE Alpine (imagem leve)
+- **Base**: Amazon Corretto 17 Alpine (imagem leve e multi-arch)
 - **Multi-stage build**: Otimiza tamanho final
 - **Usuário não-root**: Maior segurança
 - **Health check**: Monitora saúde da aplicação
 - **Porta exposta**: 8102
+- **Plataformas**: linux/amd64, linux/arm64
 
 ### Tamanho aproximado:
 - Imagem final: ~200MB
