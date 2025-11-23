@@ -1,0 +1,22 @@
+# Comandos Git para Commit
+
+# 1. Ver status dos arquivos
+git status
+
+# 2. Adicionar todos os arquivos modificados
+git add .
+
+# 3. Verificar o que será commitado
+git status
+
+# 4. Fazer o commit com mensagem detalhada
+git commit -m "security: remove exposed credentials and implement environment variables" -m "BREAKING CHANGE: docker-compose.yml removed for security" -m "- Removed docker-compose.yml with hardcoded credentials" -m "- Updated application.properties to use environment variables" -m "- Created .env.example as template" -m "- Updated .gitignore to ignore .env files" -m "- Updated all documentation with placeholders" -m "- Added SECURITY.md with best practices"
+
+# 5. Push para o repositório
+git push origin main
+
+# OU se estiver em outra branch:
+# git push origin <nome-da-branch>
+
+# 6. Verificar no GitHub Actions se o build passou
+# Acesse: https://github.com/JesseSBezerra/hub-tedio-webhook/actions
