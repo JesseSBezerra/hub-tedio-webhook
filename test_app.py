@@ -14,6 +14,7 @@ class WebhookTestCase(unittest.TestCase):
         """Set up test client"""
         self.app = app.test_client()
         self.app.testing = True
+        app.config['DEBUG'] = True  # Enable debug mode for tests
 
     def test_health_check(self):
         """Test the health check endpoint"""

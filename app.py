@@ -38,12 +38,15 @@ def webhook():
         # Get the payload
         payload = request.get_json()
         
-        # Log the received webhook
-        logger.info(f"Received webhook: {json.dumps(payload, indent=2)}")
+        # Log the received webhook (sanitized for production)
+        logger.info("Received webhook event")
+        if app.debug:
+            logger.debug(f"Payload: {json.dumps(payload, indent=2)}")
         
         # Get headers for verification if needed
         headers = dict(request.headers)
-        logger.info(f"Headers: {json.dumps(headers, indent=2)}")
+        if app.debug:
+            logger.debug(f"Headers: {json.dumps(headers, indent=2)}")
         
         # Process the webhook (extend this based on your needs)
         response = process_webhook(payload, headers)
@@ -84,6 +87,10 @@ def process_webhook(payload, headers):
 
 if __name__ == '__main__':
     # Run the application
-    port = 5000
-    logger.info(f"Starting hub-tedio-webhook on port {port}")
-    app.run(host='0.0.0.0', port=port, debug=True)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    host = os.environ.get('HOST', '0.0.0.0')
+    debug = os.environ.get('DEBUG', 'False').lower() == 'true'
+    
+    logger.info(f"Starting hub-tedio-webhook on {host}:{port}")
+    app.run(host=host, port=port, debug=debug)
