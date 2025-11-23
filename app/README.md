@@ -16,20 +16,33 @@ API REST básica desenvolvida em Spring Boot para receber webhooks da Evolution 
 
 ## ⚙️ Configuração
 
-PostgreSQL está configurado no `application.properties` mas não está sendo utilizado por enquanto:
+### Variáveis de Ambiente
 
-```properties
-spring.datasource.url=jdbc:postgresql://191.252.195.25:5432/tedioinfernal
-spring.datasource.username=evolution
-spring.datasource.password=Tor1t4ma2013
+O projeto usa variáveis de ambiente para configurações sensíveis. Crie um arquivo `.env` baseado no `.env.example`:
+
+```bash
+cp .env.example .env
+# Edite o .env com suas configurações
 ```
+
+**IMPORTANTE:** O arquivo `.env` está no `.gitignore` e **NUNCA** deve ser commitado!
 
 ## 🚀 Como Executar
 
 ### Opção 1: Docker (Recomendado) 🐳
 
 ```bash
-docker-compose up -d
+docker pull jessebezerra/tediohook:latest
+
+docker run -d \
+  --name tediohook-app \
+  -p 8102:8102 \
+  -e DATABASE_HOST=your-host \
+  -e DATABASE_PORT=5432 \
+  -e DATABASE_NAME=your-db \
+  -e DATABASE_USER=your-user \
+  -e DATABASE_PASSWORD=your-password \
+  jessebezerra/tediohook:latest
 ```
 
 A aplicação estará disponível em: `http://localhost:8102/api`

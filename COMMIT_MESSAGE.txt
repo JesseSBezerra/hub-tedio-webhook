@@ -1,0 +1,33 @@
+security: remove exposed credentials and implement environment variables
+
+BREAKING CHANGE: docker-compose.yml removed for security
+
+Changes:
+- Removed docker-compose.yml with hardcoded database credentials
+- Updated application.properties to use environment variables
+- Created .env.example as template (without real credentials)
+- Updated .gitignore to ignore .env files
+- Updated all documentation to use placeholders instead of real credentials
+- Added SECURITY.md with security best practices
+
+Security improvements:
+- Database credentials no longer in repository
+- All sensitive data passed via environment variables
+- .env files automatically ignored by git
+- Documentation uses generic examples only
+
+Migration guide:
+1. Copy .env.example to .env
+2. Edit .env with your real credentials
+3. Use docker run with -e flags or create local .env file
+4. Never commit .env files
+
+Files changed:
+- REMOVED: app/docker-compose.yml
+- ADDED: app/.env.example
+- MODIFIED: app/src/main/resources/application.properties
+- MODIFIED: .gitignore
+- MODIFIED: app/README.md
+- MODIFIED: app/DOCKER.md
+- MODIFIED: README.md
+- ADDED: .github/SECURITY.md

@@ -8,32 +8,39 @@ Instruções para executar o projeto usando Docker.
 - Docker Compose instalado (opcional, mas recomendado)
 - Conta no Docker Hub (para push de imagens)
 
-## 🚀 Opção 1: Docker Compose (Recomendado)
+## 🚀 Opção 1: Docker Hub (Recomendado)
 
-### Build e executar:
+### Pull e executar:
 ```bash
-docker-compose up -d
+docker pull jessebezerra/tediohook:latest
+
+docker run -d \
+  --name tediohook-app \
+  -p 8102:8102 \
+  -e DATABASE_HOST=your-host \
+  -e DATABASE_PORT=5432 \
+  -e DATABASE_NAME=your-db \
+  -e DATABASE_USER=your-user \
+  -e DATABASE_PASSWORD=your-password \
+  jessebezerra/tediohook:latest
 ```
 
 ### Ver logs:
 ```bash
-docker-compose logs -f
+docker logs -f tediohook-app
 ```
 
 ### Parar:
 ```bash
-docker-compose down
+docker stop tediohook-app
+docker rm tediohook-app
 ```
 
-### Rebuild (após mudanças no código):
-```bash
-docker-compose up -d --build
-```
-
-## 🔧 Opção 2: Docker CLI
+## 🔧 Opção 2: Build Local
 
 ### Build da imagem:
 ```bash
+cd app
 docker build -t tediohook:latest .
 ```
 
@@ -42,18 +49,12 @@ docker build -t tediohook:latest .
 docker run -d \
   --name tediohook-app \
   -p 8102:8102 \
-  -e SPRING_PROFILES_ACTIVE=prod \
-  -e DATABASE_HOST=191.252.195.25 \
+  -e DATABASE_HOST=your-host \
   -e DATABASE_PORT=5432 \
-  -e DATABASE_NAME=tedioinfernal \
-  -e DATABASE_USER=evolution \
-  -e DATABASE_PASSWORD=Tor1t4ma2013 \
+  -e DATABASE_NAME=your-db \
+  -e DATABASE_USER=your-user \
+  -e DATABASE_PASSWORD=your-password \
   tediohook:latest
-```
-
-### Ver logs:
-```bash
-docker logs -f tediohook-app
 ```
 
 ### Parar e remover:
@@ -182,21 +183,12 @@ docker pull jessebezerra/tediohook:latest
 docker run -d \
   --name tediohook-app \
   -p 8102:8102 \
-  -e DATABASE_HOST=191.252.195.25 \
+  -e DATABASE_HOST=your-host \
   -e DATABASE_PORT=5432 \
-  -e DATABASE_NAME=tedioinfernal \
-  -e DATABASE_USER=evolution \
-  -e DATABASE_PASSWORD=Tor1t4ma2013 \
+  -e DATABASE_NAME=your-db \
+  -e DATABASE_USER=your-user \
+  -e DATABASE_PASSWORD=your-password \
   jessebezerra/tediohook:latest
-```
-
-### Atualizar docker-compose.yml para usar imagem do Docker Hub
-
-```yaml
-services:
-  tediohook:
-    image: jessebezerra/tediohook:latest
-    # ... resto da configuração
 ```
 
 ## 📝 Notas

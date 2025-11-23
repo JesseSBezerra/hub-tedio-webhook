@@ -13,7 +13,7 @@ tediohook/
 ├── app/
 │   ├── src/                         # Código fonte da aplicação
 │   ├── Dockerfile                   # Configuração Docker
-│   ├── docker-compose.yml           # Docker Compose
+│   ├── .env.example                 # Exemplo de variáveis de ambiente
 │   ├── docker-build-push.sh         # Script build/push (Linux/Mac)
 │   ├── docker-build-push.ps1        # Script build/push (Windows)
 │   ├── pom.xml                      # Maven dependencies
@@ -29,14 +29,16 @@ tediohook/
 
 ```bash
 docker pull jessebezerra/tediohook:latest
-docker run -d -p 8102:8102 jessebezerra/tediohook:latest
-```
 
-### Usando Docker Compose
-
-```bash
-cd app
-docker-compose up -d
+docker run -d \
+  --name tediohook-app \
+  -p 8102:8102 \
+  -e DATABASE_HOST=your-host \
+  -e DATABASE_PORT=5432 \
+  -e DATABASE_NAME=your-db \
+  -e DATABASE_USER=your-user \
+  -e DATABASE_PASSWORD=your-password \
+  jessebezerra/tediohook:latest
 ```
 
 ### Desenvolvimento Local
