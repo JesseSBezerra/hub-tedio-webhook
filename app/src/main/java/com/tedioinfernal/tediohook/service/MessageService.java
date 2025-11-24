@@ -2,8 +2,11 @@ package com.tedioinfernal.tediohook.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tedioinfernal.tediohook.dto.MessageEvent;
+import com.tedioinfernal.tediohook.dto.RabbitMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -18,6 +21,13 @@ public class MessageService {
 
     private final ObjectMapper objectMapper;
     private final MessageContentExtractor contentExtractor;
+    private final RabbitTemplate rabbitTemplate;
+
+    @Value("${rabbitmq.exchange.name}")
+    private String exchangeName;
+
+    @Value("${rabbitmq.routing.key}")
+    private String routingKey;
 
     public void processMessagesUpsert(Map<String, Object> payload) {
         try {
@@ -30,9 +40,25 @@ public class MessageService {
             }
             
             logMessageInfo(data);
+            publishToRabbitMQ(payload);
             
         } catch (Exception e) {
             log.error("Erro ao processar messages.upsert", e);
+        }
+    }
+
+    private void publishToRabbitMQ(Map<String, Object> payload) {
+        try {
+            RabbitMessageDto message = RabbitMessageDto.builder()
+                    .event("MESSAGE-RECEIVED")
+                    .object(payload)
+                    .build();
+            
+            rabbitTemplate.convertAndSend(exchangeName, routingKey, message);
+            log.info("Mensagem publicada no RabbitMQ com sucesso");
+            
+        } catch (Exception e) {
+            log.error("Erro ao publicar mensagem no RabbitMQ", e);
         }
     }
 
